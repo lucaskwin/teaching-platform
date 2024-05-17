@@ -1,0 +1,120 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ExamPaper {
+  - serialVersionUID: long
+  - frameTextContentId: Integer
+  - score: Integer
+  - limitStartTime: Date
+  - taskExamId: Integer
+  - limitEndTime: Date
+  - paperType: Integer
+  - createTime: Date
+  - name: String
+  - id: Integer
+  - createUser: Integer
+  - suggestTime: Integer
+  - deleted: Boolean
+  - subjectId: Integer
+  - questionCount: Integer
+  - gradeLevel: Integer
+}
+class ExamPaperAnswer {
+  - questionCorrect: Integer
+  - paperName: String
+  - questionCount: Integer
+  - createUser: Integer
+  - paperType: Integer
+  - subjectId: Integer
+  - serialVersionUID: long
+  - userScore: Integer
+  - id: Integer
+  - doTime: Integer
+  - status: Integer
+  - taskExamId: Integer
+  - paperScore: Integer
+  - createTime: Date
+  - examPaperId: Integer
+  - systemScore: Integer
+}
+class ExamPaperAnswerInfo {
+  + examPaperAnswer: ExamPaperAnswer
+  + examPaperQuestionCustomerAnswers: List<ExamPaperQuestionCustomerAnswer>
+  + examPaper: ExamPaper
+}
+class ExamPaperQuestionCustomerAnswer {
+  - examPaperId: Integer
+  - id: Integer
+  - questionTextContentId: Integer
+  - questionScore: Integer
+  - textContentId: Integer
+  - questionType: Integer
+  - examPaperAnswerId: Integer
+  - subjectId: Integer
+  - itemOrder: Integer
+  - customerScore: Integer
+  - questionId: Integer
+  - answer: String
+  - serialVersionUID: long
+  - createTime: Date
+  - createUser: Integer
+  - doRight: Boolean
+}
+class Question {
+  - createTime: Date
+  - subjectId: Integer
+  - correct: String
+  - id: Integer
+  - score: Integer
+  - gradeLevel: Integer
+  - difficult: Integer
+  - createUser: Integer
+  - serialVersionUID: long
+  - questionType: Integer
+  - deleted: Boolean
+  - status: Integer
+  - infoTextContentId: Integer
+}
+class TaskExam {
+  - createUserName: String
+  - createTime: Date
+  - frameTextContentId: Integer
+  - id: Integer
+  - gradeLevel: Integer
+  - createUser: Integer
+  - title: String
+  - deleted: Boolean
+  - serialVersionUID: long
+}
+class TaskExamCustomerAnswer {
+  - createTime: Date
+  - taskExamId: Integer
+  - id: Integer
+  - createUser: Integer
+  - serialVersionUID: long
+  - textContentId: Integer
+}
+class TextContent {
+  - id: Integer
+  - serialVersionUID: long
+  - content: String
+  - createTime: Date
+}
+
+
+ExamPaper <-- ExamPaperAnswer
+ExamPaperAnswer <-- ExamPaperAnswerInfo
+ExamPaperAnswerInfo <-- ExamPaperQuestionCustomerAnswer
+TextContent <-- ExamPaper
+TextContent <-- TaskExam
+
+TextContent <-- TaskExamCustomerAnswer
+TaskExam <-- TaskExamCustomerAnswer
+TextContent <-- Question
+Question <-- ExamPaperQuestionCustomerAnswer
+
+
+@enduml

@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">学之思管理系统</h3>
+        <h3 class="title">智慧教学平台</h3>
       </div>
 
       <el-form-item prop="userName">
@@ -50,19 +50,18 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
     </el-form>
-
-    <div class="account-foot-copyright">
-      <span>Copyright ©2019-2024 武汉思维跳跃科技有限公司 版权所有</span>
-    </div>
+    <Copyright />
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 import loginApi from '@/api/login'
+import Copyright from '@/components/Copyright'
 
 export default {
   name: 'Login',
+  components: { Copyright },
   data () {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 5) {

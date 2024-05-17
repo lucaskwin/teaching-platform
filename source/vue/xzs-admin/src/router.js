@@ -185,6 +185,20 @@ const constantRoutes = [
         meta: { title: '学科编辑', noCache: true, activeMenu: '/education/subject/list' },
         hidden: true
       }
+      //,
+      // {
+      //   path: 'textbook/list',
+      //   component: () => import('@/views/education/textbook/list'),
+      //   name: 'EducationTextBookPage',
+      //   meta: { title: '教学文件列表', noCache: true }
+      // },
+      // {
+      //   path: 'textbook/edit',
+      //   component: () => import('@/views/education/textbook/edit'),
+      //   name: 'EducationTextBookEditPage',
+      //   meta: { title: '教学文件编辑', noCache: true, activeMenu: '/education/textbook/list' },
+      //   hidden: true
+      // }
     ]
   },
   {

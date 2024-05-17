@@ -1,13 +1,10 @@
 <template>
   <div class="lowin  lowin-blue">
-    <div class="lowin-brand">
-      <img src="@/assets/logo2.png" alt="logo" style="margin-top: 12px">
-    </div>
     <div class="lowin-wrapper">
       <div class="lowin-box lowin-register">
         <div class="lowin-box-inner">
           <el-form ref="loginForm" :model="loginForm">
-            <p>学之思开源考试系统</p>
+            <p>智慧教学平台</p>
             <div class="lowin-group">
               <label>用户名 </label>
               <el-input ref="userName" v-model="loginForm.userName" class="lowin-input" placeholder="用户名"
@@ -162,7 +159,7 @@ export default {
     background-color: #fff;
     -webkit-box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
     box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
-    padding: 60px 25px 25px 25px;
+    padding: 25px 25px 25px 25px;
     text-align: left;
     border-radius: 3px;
   }

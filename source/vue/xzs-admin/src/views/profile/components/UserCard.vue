@@ -6,7 +6,7 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <img :src="userInfo.imagePath === null ? require('@/assets/avatar.gif') : userInfo.imagePath " height="100px" width="100px" style="border-radius: 50px">
+        <img :src="userInfo.imagePath === null ? require('@/assets/avatar.png') : userInfo.imagePath " height="100px" width="100px" style="border-radius: 50px">
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ userInfo.userName }}</div>

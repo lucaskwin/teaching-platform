@@ -8,9 +8,7 @@
         <tags-view/>
       </div>
       <app-main />
-      <div class="foot-copyright">
-        <span>Copyright ©2019-2024 武汉思维跳跃科技有限公司 版权所有</span>
-      </div>
+      <Copyright></Copyright>
       <back-to-top :visibility-height="100" :back-position="0" transition-name="fade" ref="backTop"/>
     </div>
   </div>
@@ -21,9 +19,11 @@ import { AppMain, Navbar, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import BackToTop from '@/components/BackToTop'
+import Copyright from '@/components/Copyright'
 export default {
   name: 'Layout',
   components: {
+    Copyright,
     AppMain,
     Navbar,
     Sidebar,

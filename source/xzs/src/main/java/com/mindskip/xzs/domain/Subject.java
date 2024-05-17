@@ -2,7 +2,7 @@ package com.mindskip.xzs.domain;
 
 import java.io.Serializable;
 
-public class Subject implements Serializable {
+public class Subject extends ExamPaper implements Serializable {
 
     private static final long serialVersionUID = 8058095034457106501L;
 
@@ -14,7 +14,7 @@ public class Subject implements Serializable {
     private String name;
 
     /**
-     * 年级 (1-12) 小学 初中
+     * 年级数字
      */
     private Integer level;
 

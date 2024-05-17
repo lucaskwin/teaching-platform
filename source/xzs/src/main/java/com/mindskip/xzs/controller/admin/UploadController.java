@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RequestMapping("/api/admin/upload")
@@ -31,6 +33,7 @@ public class UploadController extends BaseApiController {
     private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
     private static final String IMAGE_UPLOAD = "imgUpload";
     private static final String IMAGE_UPLOAD_FILE = "upFile";
+    private static final String UPLOAD_PATH = "/../";
     private final UserService userService;
 
     @Autowired
@@ -99,5 +102,68 @@ public class UploadController extends BaseApiController {
         }
     }
 
+    @PostMapping("/upload")
+    public RestResponse textBookUpload(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
+        // 获取上传的文件名称
+        String fileName = file.getOriginalFilename();
+        // 得到文件保存的位置以及新文件名
+        File dest = new File(UPLOAD_PATH + fileName);
+        // 判断Path是否存在，不存在就创建
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdir();
+        }
+        try {
+            // 上传的文件被保存了
+            file.transferTo(dest);
+            // 打印日志
+            logger.info("上传成功，当前上传的文件保存在 {}", UPLOAD_PATH + fileName);
+            // 自定义返回的统一的 JSON 格式的数据，可以直接返回这个字符串也是可以的。
+            Map map = new HashMap<>();
+            map.put("filename",fileName);
+            return RestResponse.ok(map);
+        } catch (IOException e) {
+            logger.error(e.toString());
+        }
+        // 待完成 —— 文件类型校验工作
+        return RestResponse.fail(2, "上传失败");
+    }
 
+    @PostMapping("/remove")
+    public RestResponse textBookRemove(@RequestParam String filename){
+        File dest = new File(UPLOAD_PATH + filename);
+        if(dest.exists()){
+            // 上传的文件被保存了
+            dest.delete();
+            // 打印日志
+            logger.info("{}删除成功",filename);
+            return RestResponse.ok("删除成功");
+        }
+
+        // 待完成 —— 文件类型校验工作
+        return RestResponse.fail(2, "删除失败");
+    }
+
+    @GetMapping("/download")
+    public void textBookDownload(@RequestParam String filename, HttpServletResponse response) throws UnsupportedEncodingException {
+        File dest = new File(UPLOAD_PATH + filename);
+        if(dest.exists()){
+            response.reset();
+            response.setContentType("application/octet-stream");
+            response.setCharacterEncoding("utf-8");
+            response.setContentLength((int) dest.length());
+            response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode( filename , "UTF-8"));
+
+            try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(dest));) {
+                byte[] buff = new byte[1024];
+                OutputStream os  = response.getOutputStream();
+                int i = 0;
+                while ((i = bis.read(buff)) != -1) {
+                    os.write(buff, 0, i);
+                    os.flush();
+                }
+            } catch (IOException e) {
+                logger.error("{}",e);
+            }
+        }
+    }
 }
