@@ -4,8 +4,15 @@ package com.mindskip.xzs.controller.admin;
 import com.mindskip.xzs.base.BaseApiController;
 import com.mindskip.xzs.base.RestResponse;
 import com.mindskip.xzs.domain.Subject;
+import com.mindskip.xzs.domain.TextBook;
 import com.mindskip.xzs.service.SubjectService;
+import com.mindskip.xzs.service.TextBookService;
+import com.mindskip.xzs.utility.JsonUtil;
 import com.mindskip.xzs.utility.PageInfoHelper;
+import com.mindskip.xzs.viewmodel.admin.book.TextBookEditItemVM;
+import com.mindskip.xzs.viewmodel.admin.book.TextBookEditRequestVM;
+import com.mindskip.xzs.viewmodel.admin.book.TextBookPageRequestVM;
+import com.mindskip.xzs.viewmodel.admin.book.TextBookResponseVM;
 import com.mindskip.xzs.viewmodel.admin.education.SubjectEditRequestVM;
 import com.mindskip.xzs.viewmodel.admin.education.SubjectPageRequestVM;
 import com.mindskip.xzs.viewmodel.admin.education.SubjectResponseVM;
@@ -22,9 +29,11 @@ public class EducationController extends BaseApiController {
 
     private final SubjectService subjectService;
 
+    private final TextBookService textBookService;
     @Autowired
-    public EducationController(SubjectService subjectService) {
+    public EducationController(SubjectService subjectService,TextBookService textBookService) {
         this.subjectService = subjectService;
+        this.textBookService = textBookService;
     }
 
     @RequestMapping(value = "/subject/list", method = RequestMethod.POST)
@@ -66,4 +75,48 @@ public class EducationController extends BaseApiController {
         subjectService.updateByIdFilter(subject);
         return RestResponse.ok();
     }
+
+
+    @RequestMapping(value = "/textbook/list", method = RequestMethod.POST)
+    public RestResponse<List<TextBook>> textbookList() {
+        List<TextBook> textBooks = textBookService.allTextBook();
+        return RestResponse.ok(textBooks);
+    }
+
+    @RequestMapping(value = "/textbook/page", method = RequestMethod.POST)
+    public RestResponse<PageInfo<TextBookResponseVM>> textbookPageList(@RequestBody TextBookPageRequestVM model) {
+        PageInfo<TextBook> pageInfo = textBookService.page(model);
+        PageInfo<TextBookResponseVM> page = PageInfoHelper.copyMap(pageInfo, e -> modelMapper.map(e, TextBookResponseVM.class));
+        return RestResponse.ok(page);
+    }
+
+    @RequestMapping(value = "/textbook/edit", method = RequestMethod.POST)
+    public RestResponse textbookEdit(@RequestBody TextBookEditRequestVM model) {
+        TextBook textBook = modelMapper.map(model, TextBook.class);
+        textBook.setFilePath(JsonUtil.toJsonStr(model.getFilePathItems()));
+        if (model.getId() == null) {
+            // textBook.setDeleted(false);
+            textBookService.insertByFilter(textBook);
+        } else {
+            textBookService.updateByIdFilter(textBook);
+        }
+        return RestResponse.ok();
+    }
+
+    @RequestMapping(value = "/textbook/select/{id}", method = RequestMethod.POST)
+    public RestResponse<TextBookEditRequestVM> textbookSelect(@PathVariable Integer id) {
+        TextBook textBook = textBookService.selectById(id);
+        TextBookEditRequestVM vm = modelMapper.map(textBook, TextBookEditRequestVM.class);
+        vm.setFilePathItems(JsonUtil.toJsonListObject(textBook.getFilePath(), TextBookEditItemVM.class));
+        return RestResponse.ok(vm);
+    }
+
+    @RequestMapping(value = "/textbook/delete/{id}", method = RequestMethod.POST)
+    public RestResponse textbookDelete(@PathVariable Integer id) {
+        TextBook textBook = textBookService.selectById(id);
+        // book.setDeleted(true);
+        textBookService.deleteById(textBook.getId());
+        return RestResponse.ok();
+    }
+
 }

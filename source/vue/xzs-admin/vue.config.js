@@ -48,5 +48,10 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+  },
+  configureWebpack: {
+    externals: {
+      'Vue3DModel': 'Vue3DModel'
+    }
   }
 }

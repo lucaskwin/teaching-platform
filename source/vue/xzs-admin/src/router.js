@@ -29,6 +29,12 @@ const constantRoutes = [
     redirect: '/dashboard',
     children: [
       {
+        path: 'threedviewer',
+        component: () => import('@/views/threedviewer/index'),
+        name: 'ThreedViewer',
+        hidden: true,
+        meta: { title: '预览文件'}
+      },{
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
@@ -100,6 +106,12 @@ const constantRoutes = [
         component: () => import('@/views/exam/question/list'),
         name: 'ExamQuestionPageList',
         meta: { title: '题目列表', noCache: true }
+      },
+      {
+        path: 'graph',
+        component: () => import('@/views/graph/index'),
+        name: 'Graph',
+        meta: { title: '类别图谱', noCache: true }
       },
       {
         path: 'question/edit/singleChoice',
@@ -184,21 +196,20 @@ const constantRoutes = [
         name: 'EducationSubjectEditPage',
         meta: { title: '学科编辑', noCache: true, activeMenu: '/education/subject/list' },
         hidden: true
+      },
+      {
+        path: 'textbook/list',
+        component: () => import('@/views/education/textbook/list'),
+        name: 'EducationTextBookPage',
+        meta: { title: '教学文件列表', noCache: true }
+      },
+      {
+        path: 'textbook/edit',
+        component: () => import('@/views/education/textbook/edit'),
+        name: 'EducationTextBookEditPage',
+        meta: { title: '教学文件编辑', noCache: true, activeMenu: '/education/textbook/list' },
+        hidden: true
       }
-      //,
-      // {
-      //   path: 'textbook/list',
-      //   component: () => import('@/views/education/textbook/list'),
-      //   name: 'EducationTextBookPage',
-      //   meta: { title: '教学文件列表', noCache: true }
-      // },
-      // {
-      //   path: 'textbook/edit',
-      //   component: () => import('@/views/education/textbook/edit'),
-      //   name: 'EducationTextBookEditPage',
-      //   meta: { title: '教学文件编辑', noCache: true, activeMenu: '/education/textbook/list' },
-      //   hidden: true
-      // }
     ]
   },
   {

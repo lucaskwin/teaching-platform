@@ -67,6 +67,7 @@
 import resize from './components/mixins/resize'
 import CountTo from 'vue-count-to'
 import dashboardApi from '@/api/dashboard'
+
 export default {
   mixins: [resize],
   components: {

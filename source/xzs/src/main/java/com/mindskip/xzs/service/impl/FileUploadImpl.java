@@ -3,7 +3,7 @@ package com.mindskip.xzs.service.impl;
 import com.mindskip.xzs.configuration.property.QnConfig;
 import com.mindskip.xzs.configuration.property.SystemConfig;
 import com.mindskip.xzs.service.FileUpload;
-import com.google.gson.Gson;
+import com.mindskip.xzs.utility.JsonUtil;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
@@ -38,7 +38,8 @@ public class FileUploadImpl implements FileUpload {
         String upToken = auth.uploadToken(qnConfig.getBucket());
         try {
             Response response = uploadManager.put(inputStream, null, upToken, null, null);
-            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            DefaultPutRet putRet = JsonUtil.toJsonObject(response.bodyString(), DefaultPutRet.class);
+            // DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             return qnConfig.getUrl() + "/" + putRet.key;
         } catch (QiniuException ex) {
             logger.error(ex.getMessage(), ex);

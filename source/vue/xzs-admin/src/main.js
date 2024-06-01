@@ -10,6 +10,10 @@ import '@/styles/index.scss' // global css
 import './icons' // icon
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
+// import Vue3DModel from './assets/vue-3d-model.global'
+
+// Vue.component('Vue3DModel', Vue3DModel)
+// console.log(Vue3DModel)
 
 Vue.use(Element, {
   size: 'medium' // set element-ui default size

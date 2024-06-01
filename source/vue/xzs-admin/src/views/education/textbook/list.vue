@@ -2,12 +2,7 @@
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true">
       <el-form-item label="标题内容：">
-        <el-input v-model="queryParam.content" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="年级：">
-        <el-select v-model="queryParam.level" placeholder="年级" @change="levelChange" clearable>
-          <el-option v-for="item in levelEnum" :key="item.key" :value="item.key" :label="item.value"></el-option>
-        </el-select>
+        <el-input v-model="queryParam.name" clearable></el-input>
       </el-form-item>
       <el-form-item label="学科：" >
         <el-select v-model="queryParam.subjectId"  clearable>
@@ -25,11 +20,15 @@
       <el-table-column prop="id" label="Id" width="90px"/>
       <el-table-column prop="subjectId" label="学科" :formatter="subjectFormatter" width="120px" />
       <el-table-column prop="name" label="名称"  />
-      <el-table-column prop="createTime" label="创建时间" width="160px"/>
+      <el-table-column  label="预览" align="center"  width="160px">
+        <template slot-scope="{row}">
+          <el-button size="mini" @click="$router.push({path:'/threedviewer',query:{filePath:row.filePath}})" >打开页面</el-button>
+        </template>
+      </el-table-column>
       <el-table-column  label="操作" align="center"  width="160px">
         <template slot-scope="{row}">
           <el-button size="mini" @click="$router.push({path:'/education/textbook/edit',query:{id:row.id}})" >编辑</el-button>
-          <el-button size="mini" type="danger"  @click="deletePaper(row)" class="link-left">删除</el-button>
+          <el-button size="mini" type="danger"  @click="deleteRow(row)" class="link-left">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +40,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import Pagination from '@/components/Pagination'
-import examPaperApi from '@/api/examPaper'
+import textBookApi from '@/api/textBook'
 
 export default {
   components: { Pagination },
@@ -49,8 +48,9 @@ export default {
     return {
       queryParam: {
         id: null,
-        level: null,
+        name: null,
         subjectId: null,
+        filePath: null,
         pageIndex: 1,
         pageSize: 10
       },
@@ -71,7 +71,7 @@ export default {
     },
     search () {
       this.listLoading = true
-      examPaperApi.pageList(this.queryParam).then(data => {
+      textBookApi.pageList(this.queryParam).then(data => {
         const re = data.response
         this.tableData = re.list
         this.total = re.total
@@ -79,9 +79,9 @@ export default {
         this.listLoading = false
       })
     },
-    deletePaper (row) {
+    deleteRow (row) {
       let _this = this
-      examPaperApi.deletePaper(row.id).then(re => {
+      textBookApi.deleteTextBook(row.id).then(re => {
         if (re.code === 1) {
           _this.search()
           _this.$message.success(re.message)
@@ -89,10 +89,6 @@ export default {
           _this.$message.error(re.message)
         }
       })
-    },
-    levelChange () {
-      this.queryParam.subjectId = null
-      this.subjectFilter = this.subjects.filter(data => data.level === this.queryParam.level)
     },
     subjectFormatter  (row, column, cellValue, index) {
       return this.subjectEnumFormat(cellValue)

@@ -102,7 +102,7 @@ public class UploadController extends BaseApiController {
         }
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/textbook")
     public RestResponse textBookUpload(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
         // 获取上传的文件名称
         String fileName = file.getOriginalFilename();
@@ -128,7 +128,7 @@ public class UploadController extends BaseApiController {
         return RestResponse.fail(2, "上传失败");
     }
 
-    @PostMapping("/remove")
+    @PostMapping("/textbook/remove")
     public RestResponse textBookRemove(@RequestParam String filename){
         File dest = new File(UPLOAD_PATH + filename);
         if(dest.exists()){
@@ -143,7 +143,7 @@ public class UploadController extends BaseApiController {
         return RestResponse.fail(2, "删除失败");
     }
 
-    @GetMapping("/download")
+    @GetMapping("/textbook/download")
     public void textBookDownload(@RequestParam String filename, HttpServletResponse response) throws UnsupportedEncodingException {
         File dest = new File(UPLOAD_PATH + filename);
         if(dest.exists()){
